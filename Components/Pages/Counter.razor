@@ -4,9 +4,12 @@
 
 <h1>Counter</h1>
 
-<p role="status">Current count: @currentCount</p>
+<p role="status">Current count: <span style="color: @GetTextColor()">@currentCount</span></p>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<div class="d-flex gap-2">
+    <button class="btn btn-primary" @onclick="IncrementCount">増やす</button>
+    <button class="btn btn-dark" @onclick="DecrementCount">減らす</button>
+</div>
 
 @code {
     private int currentCount = 0;
@@ -14,5 +17,19 @@
     private void IncrementCount()
     {
         currentCount++;
+    }
+
+    private void DecrementCount()
+    {
+        currentCount--;
+    }
+
+    private string GetTextColor()
+    {
+        if (currentCount >= 1 && currentCount <= 5)
+        {
+            return "red";
+        }
+        return "black";
     }
 }
