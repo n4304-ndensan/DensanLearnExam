@@ -7,8 +7,8 @@
 <p role="status">Current count: <span style="color: @GetTextColor()">@currentCount</span></p>
 
 <div class="d-flex gap-2">
-    <button class="btn btn-primary" @onclick="IncrementCount">増やす</button>
-    <button class="btn btn-dark" @onclick="DecrementCount">減らす</button>
+    <RadzenButton Text="増やす" Click="IncrementCount" class="btn btn-primary"/>
+    <RadzenButton Text="減らす" Click="DecrementCount" class="btn btn-dark"/>
 </div>
 
 @code {
