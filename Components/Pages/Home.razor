@@ -1,7 +1,66 @@
 ﻿@page "/"
+@using BlazorApp.Models
+@using BlazorApp.Services
+@inject NavigationManager NavigationManager
+@inject IStateBox<List<TaskModel>> TaskState
 
-<PageTitle>Home</PageTitle>
+<link href="css/Home.css" rel="stylesheet" />
 
-<h1>Hello, world!</h1>
+<RadzenHeading Size="H3" Style="color: #007bff; font-weight: bold;">
+    📋 タスク一覧
+</RadzenHeading>
 
-Welcome to your new app.
+<RadzenRow Class="justify-content-end mb-3">
+    <RadzenColumn Width="auto">
+        <RadzenButton 
+            Text="タスクを追加する" 
+            Click="@NavigateToAddTask" 
+            Icon="add_circle" 
+            ButtonStyle="Radzen.ButtonStyle.Primary" 
+            Style="font-weight: bold; padding: 8px 16px;" 
+        />
+    </RadzenColumn>
+</RadzenRow>
+
+<RadzenDataGrid Data="@TaskState.State" TItem="TaskModel" LoadData="LoadTask"
+                Class="table table-striped table-hover border rounded shadow-sm" RowHover="true" ShowPagingSummary="true" AllowPaging="true" PageSize="10" Style="border: 1px solid #e5e5e5;">
+
+    <Columns>
+        <!-- 状態列 -->
+        <RadzenDataGridColumn TItem="TaskModel" Property="Status" Title="状態" Width="100px">
+            <Template Context="task">
+                <span class="badge" style="background-color:@GetStatusColor(task.Status)">
+                    @task.GetStatusText()
+                </span>
+            </Template>
+        </RadzenDataGridColumn>
+
+        <!-- 期限列 -->
+        <RadzenDataGridColumn TItem="TaskModel" Property="DueDate" Title="期限" Width="150px">
+            <Template Context="task">
+                <span class="text-secondary">
+                    📅 @task.DueDate.ToShortDateString()
+                </span>
+            </Template>
+        </RadzenDataGridColumn>
+
+        <!-- 題名列 -->
+        <RadzenDataGridColumn TItem="TaskModel" Property="Title" Title="題名" Width="200px">
+            <Template Context="task">
+                <strong>@task.Title</strong>
+            </Template>
+        </RadzenDataGridColumn>
+
+        <!-- 内容列 -->
+        <RadzenDataGridColumn TItem="TaskModel" Property="Content" Title="内容" Width="300px">
+            <Template Context="task">
+                @task.Content.Split(Environment.NewLine).FirstOrDefault()
+                @if (!string.IsNullOrEmpty(task.Content.Split(Environment.NewLine).Skip(1).FirstOrDefault()))
+                {
+                    <a href="#" class="text-primary" title="詳細を表示">...続きを読む</a>
+                }
+            </Template>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>
+

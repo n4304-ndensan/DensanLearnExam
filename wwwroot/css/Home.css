@@ -1,0 +1,38 @@
+﻿h3.text-primary {
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.table {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f9f9f9;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f0f0f0;
+}
+
+.badge {
+    padding: 0.4em 0.8em;
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #fff;
+    border-radius: 4px;
+}
+
+.d-flex .RadzenButton {
+    margin-right: 0.5em;
+}
+
+/* Additional badge colors based on status */
+.badge-not-started { background-color: #6c757d; } /* Gray for Not Started */
+.badge-in-progress { background-color: #ffc107; } /* Yellow for In Progress */
+.badge-completed { background-color: #28a745; } /* Green for Completed */
+.badge-ignored { background-color: #dc3545; } /* Red for Ignored */
