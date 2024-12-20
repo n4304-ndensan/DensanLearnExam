@@ -2,7 +2,7 @@
 @using BlazorApp.Models
 @using BlazorApp.Services
 @inject NavigationManager NavigationManager
-@inject IStateBox<List<TaskModel>> TaskState
+@inject IStateBox<List<EmployeeModel>> EmployeeState
 
 <link href="css/Home.css" rel="stylesheet" />
 
@@ -13,8 +13,8 @@
 <RadzenRow Class="justify-content-end mb-3">
     <RadzenColumn Width="auto">
         <RadzenButton 
-            Text="タスクを追加する" 
-            Click="@NavigateToAddTask" 
+            Text="社員を追加する" 
+            Click="@NavigateToAddEmployee" 
             Icon="add_circle" 
             ButtonStyle="Radzen.ButtonStyle.Primary" 
             Style="font-weight: bold; padding: 8px 16px;" 
@@ -22,43 +22,39 @@
     </RadzenColumn>
 </RadzenRow>
 
-<RadzenDataGrid Data="@TaskState.State" TItem="TaskModel" LoadData="LoadTask"
+<RadzenDataGrid Data="@EmployeeState.State" TItem="EmployeeModel" LoadData="LoadTask"
                 Class="table table-striped table-hover border rounded shadow-sm" RowHover="true" ShowPagingSummary="true" AllowPaging="true" PageSize="10" Style="border: 1px solid #e5e5e5;">
 
     <Columns>
-        <!-- 状態列 -->
-        <RadzenDataGridColumn TItem="TaskModel" Property="Status" Title="状態" Width="100px">
-            <Template Context="task">
-                <span class="badge" style="background-color:@GetStatusColor(task.Status)">
-                    @task.GetStatusText()
+        <!-- 氏名 -->
+        <RadzenDataGridColumn TItem="EmployeeModel" Property="Name" Title="氏名" Width="100px">
+            <Template Context="employee">
+                @employee.Name
+            </Template>
+        </RadzenDataGridColumn>
+
+        <!-- 雇用形態 -->
+        <RadzenDataGridColumn TItem="EmployeeModel" Property="Type" Title="雇用形態" Width="120px">
+            <Template Context="employee">
+                <span class="badge" style="background-color:@GetTypeColor(employee.Type)">
+                    @employee.GetTypeText()
                 </span>
             </Template>
         </RadzenDataGridColumn>
 
-        <!-- 期限列 -->
-        <RadzenDataGridColumn TItem="TaskModel" Property="DueDate" Title="期限" Width="150px">
-            <Template Context="task">
+        <!-- 入社日 -->
+        <RadzenDataGridColumn TItem="EmployeeModel" Property="JoiningDate" Title="入社日" Width="120px">
+            <Template Context="employee">
                 <span class="text-secondary">
-                    📅 @task.DueDate.ToShortDateString()
+                    📅 @employee.JoiningDate.ToShortDateString()
                 </span>
             </Template>
         </RadzenDataGridColumn>
 
-        <!-- 題名列 -->
-        <RadzenDataGridColumn TItem="TaskModel" Property="Title" Title="題名" Width="200px">
-            <Template Context="task">
-                <strong>@task.Title</strong>
-            </Template>
-        </RadzenDataGridColumn>
-
-        <!-- 内容列 -->
-        <RadzenDataGridColumn TItem="TaskModel" Property="Content" Title="内容" Width="300px">
-            <Template Context="task">
-                @task.Content.Split(Environment.NewLine).FirstOrDefault()
-                @if (!string.IsNullOrEmpty(task.Content.Split(Environment.NewLine).Skip(1).FirstOrDefault()))
-                {
-                    <a href="#" class="text-primary" title="詳細を表示">...続きを読む</a>
-                }
+        <!-- 備考列 -->
+        <RadzenDataGridColumn TItem="EmployeeModel" Property="Remarks" Title="備考" Width="300px">
+            <Template Context="employee">
+                @employee.Remarks.Split('\n')[0]
             </Template>
         </RadzenDataGridColumn>
     </Columns>

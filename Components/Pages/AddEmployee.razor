@@ -1,0 +1,75 @@
+﻿@page "/add-employee"
+@using BlazorApp.Models
+@using BlazorApp.Services
+@inject NavigationManager NavigationManager
+@inject IStateBox<List<EmployeeModel>> EmployeeState
+
+<RadzenHeading Size="H3" Style="color: #007bff; font-weight: bold;">
+    社員登録
+</RadzenHeading>
+
+<div class="mb-4">
+    @if (errorMessages.Count > 0)
+    {
+        <div class="alert alert-danger" role="alert">
+            @foreach (string errorMessage in errorMessages)
+            {
+                <div>@errorMessage</div>
+            }
+        </div>
+    }
+</div>
+
+<div class="p-4">
+    <RadzenCard Style="max-width: 600px; margin: auto; padding: 25px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); border-radius: 8px;">
+        <div class="mb-4">
+            <RadzenLabel Text="氏名" Style="font-weight: bold; font-size: 1.1em;" />
+            <RadzenTextBox 
+                Style="width: 100%; margin-top: 8px; padding: 10px; border-radius: 4px; height: 40px; border: 1px solid #ced4da;"
+                @bind-Value="newEmployee.Name" 
+                Placeholder="氏名を入力してください" />
+        </div>
+
+        <div class="mb-4">
+            <RadzenLabel Text="入社日" Style="font-weight: bold; font-size: 1.1em;" />
+            <RadzenDatePicker 
+                @bind-Value="newEmployee.JoiningDate" 
+                ShowTime="false" 
+                DateFormat="yyyy/MM/dd" 
+                Style="width: 100%; margin-top: 8px; border-radius: 4px; height: 40px;" />
+        </div>
+
+        <div class="mb-4">
+            <RadzenLabel Text="雇用形態" Style="font-weight: bold; font-size: 1.1em;" />
+            <RadzenDropDown 
+                TValue="EmployeeModel.EmploymentType" 
+                Data="@newEmployeeTypeList" 
+                TextProperty="Text" 
+                ValueProperty="Value"
+                @bind-Value="newEmployee.Type"
+                Style="width: 100%; margin-top: 8px; padding: 10px; border-radius: 4px; height: 40px; border: 1px solid #ced4da;" />
+        </div>
+
+        <div class="mb-4">
+            <RadzenLabel Text="備考" Style="font-weight: bold; font-size: 1.1em;" />
+            <RadzenTextArea 
+                Style="width: 100%; margin-top: 8px; padding: 10px; border-radius: 4px; height: 100px; border: 1px solid #ced4da;" 
+                @bind-Value="newEmployee.Remarks" 
+                Rows="5" 
+                Placeholder="備考を入力してください" />
+        </div>
+
+        <div class="d-flex justify-content-end mt-4">
+            <RadzenButton 
+                Text="取消" 
+                ButtonStyle="Radzen.ButtonStyle.Danger" 
+                Click="@Cancel" 
+                Style="margin-right: 12px; padding: 12px 24px; font-weight: bold; border-radius: 4px;" />
+            <RadzenButton 
+                Text="登録" 
+                Click="@SaveNewEmployeeAsync" 
+                ButtonStyle="Radzen.ButtonStyle.Primary" 
+                Style="padding: 12px 24px; font-weight: bold; border-radius: 4px;" />
+        </div>
+    </RadzenCard>
+</div>

@@ -4,29 +4,31 @@ using Microsoft.AspNetCore.Components;
 namespace BlazorApp.Components.Pages;
 public partial class Home
 {
-    private List<TaskModel>? taskList;
+    private List<EmployeeModel>? employeeList;
 
     protected override async Task OnInitializedAsync()
     {
         // デフォルトのタスクリストを初期化
-        taskList ??= new List<TaskModel>
+        employeeList ??= new List<EmployeeModel>
         {
-            new TaskModel { Title = "タスク1", DueDate = DateTime.Today.AddDays(2), Status = TaskModel.TaskStatus.NotStarted, Content = "タスク1の内容" },
-            new TaskModel { Title = "タスク2", DueDate = DateTime.Today.AddDays(1), Status = TaskModel.TaskStatus.InProgress, Content = "タスク2の内容" },
-            new TaskModel { Title = "タスク3", DueDate = DateTime.Today.AddDays(3), Status = TaskModel.TaskStatus.Completed, Content = "タスク3の内容" }
+            new EmployeeModel { Name = "社員A", JoiningDate = new DateTime(2020, 1, 1), Type = EmployeeModel.EmploymentType.FullTime, Remarks = "備考A" },
+            new EmployeeModel { Name = "社員B", JoiningDate = new DateTime(2021, 2, 1), Type = EmployeeModel.EmploymentType.Contract, Remarks = "備考B" },
+            new EmployeeModel { Name = "社員C", JoiningDate = new DateTime(2022, 3, 1), Type = EmployeeModel.EmploymentType.Partner, Remarks = "備考C" },
+            new EmployeeModel { Name = "社員D", JoiningDate = new DateTime(2023, 4, 1), Type = EmployeeModel.EmploymentType.FullTime, Remarks = "備考D" },
+            new EmployeeModel { Name = "社員E", JoiningDate = new DateTime(2024, 5, 1), Type = EmployeeModel.EmploymentType.Contract, Remarks = "備考E" }
         };
 
-        // TaskState の状態が存在するか確認し、なければ初期化
-        if (TaskState.HasState)
+        // EmployeeState の状態が存在するか確認し、なければ初期化
+        if (EmployeeState.HasState)
         {
-            taskList = TaskState.State!;
+            employeeList = EmployeeState.State!;
         }
         else
         {
-            TaskState.State = taskList;
+            EmployeeState.State = employeeList;
         }
 
-        TaskState.State!.Sort();
+        EmployeeState.State!.Sort();
         
         await Task.CompletedTask;
     }
@@ -35,26 +37,25 @@ public partial class Home
     {
         await Task.Yield();
 
-        if (TaskState.HasState)
+        if (EmployeeState.HasState)
         {
-            TaskState.State = taskList;
+            EmployeeState.State = employeeList;
             return;
         }
     }
 
-    private void NavigateToAddTask()
+    private void NavigateToAddEmployee()
     {
-        NavigationManager.NavigateTo("/add-task");
+        NavigationManager.NavigateTo("/add-employee");
     }
-    private string GetStatusColor(TaskModel.TaskStatus status)
+    private string GetTypeColor(EmployeeModel.EmploymentType type)
     {
-        return status switch
+        return type switch
         {
-            TaskModel.TaskStatus.NotStarted => "#6c757d", // Gray
-            TaskModel.TaskStatus.InProgress => "#ffc107", // Yellow
-            TaskModel.TaskStatus.Completed => "#28a745", // Green
-            TaskModel.TaskStatus.Ignored => "#dc3545", // Red
-            _ => "#007bff" // Blue
+            EmployeeModel.EmploymentType.FullTime => "#007bff", // Blue
+            EmployeeModel.EmploymentType.Contract => "#28a745", // Green
+            EmployeeModel.EmploymentType.Partner => "#ffc107", // Yellow
+            _ => "#6c757d" // Gray
         };
     }
 }
